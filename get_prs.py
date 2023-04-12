@@ -16,7 +16,7 @@ variables = {
 query = """
 query ($after: String, $owner: String!, $name: String!) {
   repository(name: $name, owner: $owner) {
-    pullRequests(first: 100, after: $after,states: [CLOSED, MERGED]) {
+    pullRequests(first: 100, after: $after, states: [CLOSED, MERGED]) {
       pageInfo {
         endCursor
         hasNextPage
@@ -24,14 +24,11 @@ query ($after: String, $owner: String!, $name: String!) {
       nodes {
         createdAt
         closedAt
-        reviews {
-          totalCount
-        }
+        reviews { totalCount }
         state
         body
-        files {
-          totalCount
-        }
+        files { totalCount }
+        comments { totalCount }
       }
     }
   }
@@ -70,10 +67,13 @@ for i, row in repo_list.iterrows():
                         'tamanho': pr['files']['totalCount'],
                         'tempo': tempo,
                         'descricao': len(pr['body']),
-                        'interacoes': reviews,
+                        'interacoes': pr['comments']['totalCount'],
+                        'reviews': reviews,
+                        'state': pr['state']
                     })
     except Exception as e:
         print(e)
 
 df = pd.DataFrame(data=data)
+print(df)
 df.to_csv('dados_pr.csv')
