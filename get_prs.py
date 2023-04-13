@@ -101,7 +101,6 @@ for i, row in repo_list.iterrows():
         except Exception as e:
             print(e)
             swap_token()
-            time.sleep(300)
             with open('log.txt', '+a') as f:
                 f.write(row['name'] + ',' + row['owner'] + ',' +
                         variables["after"] + '\n')
