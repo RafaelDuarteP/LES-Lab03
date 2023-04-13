@@ -48,6 +48,7 @@ while len(data) < 200:
             data.append({
                 'owner': repo['nameWithOwner'].split('/')[0],
                 'name': repo['nameWithOwner'].split('/')[1],
+                'total_prs': total_pr,
             })
 
 df = pd.DataFrame(data=data[:200])
