@@ -10,12 +10,8 @@ qtd_iteracoes = 0
 
 last_token = 0
 url = "https://api.github.com/graphql"
-token_rafael = os.getenv(
-    'TOKEN_GITHUB') if 'TOKEN_GITHUB' in os.environ else os.getenv(
-        '{{secrets.TOKEN_GITHUB}}')
-token_davi = os.getenv(
-    'TOKEN_GITHUB_DAVI') if 'TOKEN_GITHUB_DAVI' in os.environ else os.getenv(
-        '{{secrets.TOKEN_GITHUB_DAVI}}')
+token_rafael = os.getenv('TOKEN_GITHUB')
+token_davi = os.getenv('TOKEN_GITHUB_DAVI')
 variables = {
     'after': None,
     'name': None,
@@ -59,9 +55,6 @@ client = GraphQLClient(url)
 
 repo_list = pd.read_csv('lista-repo.csv')
 data = []
-
-print(token_davi)
-print(token_rafael)
 
 for i, row in repo_list.iterrows():
     variables["name"] = row['name']

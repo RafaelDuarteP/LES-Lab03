@@ -21,6 +21,9 @@ jobs:
           pip install -r requirements.txt
 
       - name: run
+        env:
+          TOKEN_GITHUB: ${{secrets.TOKEN_GITHUB}}
+          TOKEN_GITHUB_DAVI: ${{secrets.TOKEN_GITHUB_DAVI}}
         run: python get_prs.py
 
       - name: Commit changes
