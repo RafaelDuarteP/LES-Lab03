@@ -5,13 +5,25 @@ import json
 import os
 import time
 
+last_token = 0
 url = "https://api.github.com/graphql"
-token = "Bearer " + os.getenv('TOKEN_GITHUB')
+token_rafael = os.getenv('TOKEN_GITHUB')
+token_davi = os.getenv('TOKEN_GITHUB_DAVI')
 variables = {
     'after': None,
     'name': None,
     'owner': None,
 }
+
+
+def swap_token():
+    if last_token == 0:
+        last_token += 1
+        return token_rafael
+    else:
+        last_token -= 1
+        return token_davi
+
 
 query = """
 query ($after: String, $owner: String!, $name: String!) {
@@ -35,7 +47,6 @@ query ($after: String, $owner: String!, $name: String!) {
 }
 """
 client = GraphQLClient(url)
-client.inject_token(token=token)
 
 repo_list = pd.read_csv('lista-repo.csv')
 data = []
@@ -46,6 +57,8 @@ for i, row in repo_list.iterrows():
     has_next = True
     try:
         while has_next:
+            token = "Bearer " + swap_token()
+            client.inject_token(token=token)
             time.sleep(0.05)
             result = json.loads(
                 client.execute(
@@ -76,4 +89,4 @@ for i, row in repo_list.iterrows():
 
 df = pd.DataFrame(data=data)
 print(df)
-df.to_csv('dados_pr.csv')
+df.to_csv('dados_pr.csv', index=False)
