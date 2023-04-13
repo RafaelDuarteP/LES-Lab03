@@ -1,9 +1,12 @@
+import traceback
 from graphqlclient import GraphQLClient
 from datetime import datetime
 import pandas as pd
 import json
 import os
 import time
+
+qtd_iteracoes = 0
 
 last_token = 0
 url = "https://api.github.com/graphql"
@@ -17,6 +20,7 @@ variables = {
 
 
 def swap_token():
+    global last_token
     if last_token == 0:
         last_token += 1
         return token_rafael
@@ -34,6 +38,7 @@ query ($after: String, $owner: String!, $name: String!) {
         hasNextPage
       }
       nodes {
+        id
         createdAt
         closedAt
         reviews { totalCount }
@@ -55,8 +60,10 @@ for i, row in repo_list.iterrows():
     variables["name"] = row['name']
     variables["owner"] = row['owner']
     has_next = True
-    try:
-        while has_next:
+    while has_next:
+        try:
+            print('nº iteraçoes: ', qtd_iteracoes)
+            qtd_iteracoes += 1
             token = "Bearer " + swap_token()
             client.inject_token(token=token)
             time.sleep(0.05)
@@ -69,24 +76,29 @@ for i, row in repo_list.iterrows():
             variables["after"] = end_cursor
             pull_requests = result["nodes"]
             for pr in pull_requests:
-                reviews = pr['reviews']['totalCount']
                 created_at = datetime.strptime(pr['createdAt'],
                                                '%Y-%m-%dT%H:%M:%SZ')
                 closed_at = datetime.strptime(pr['closedAt'],
                                               '%Y-%m-%dT%H:%M:%SZ')
-                tempo = (closed_at - created_at).total_seconds()
-                if reviews >= 1 and tempo >= 3600:
-                    data.append({
-                        'tamanho': pr['files']['totalCount'],
-                        'tempo': tempo,
-                        'descricao': len(pr['body']),
-                        'interacoes': pr['comments']['totalCount'],
-                        'reviews': reviews,
-                        'state': pr['state']
-                    })
-    except Exception as e:
-        print(e)
+                data.append({
+                    'repo': row['name'],
+                    'owner': row['owner'],
+                    'tamanho': pr['files']['totalCount'],
+                    'id': pr['id'],
+                    'created_at': created_at,
+                    'closed_at': closed_at,
+                    'descricao': len(pr['body']),
+                    'interacoes': pr['comments']['totalCount'],
+                    'reviews': pr['reviews']['totalCount'],
+                    'state': pr['state']
+                })
+                df = pd.DataFrame(data=data)
+                df.to_csv('dados_pr.csv', index=False)
+        except:
+            swap_token()
+            time.sleep(300)
+            with open('log.txt', '+a') as f:
+                f.write(row['name'] + ',' + row['owner'] + ',' +
+                        variables["after"] + '\n')
 
-df = pd.DataFrame(data=data)
 print(df)
-df.to_csv('dados_pr.csv', index=False)
