@@ -10,8 +10,12 @@ qtd_iteracoes = 0
 
 last_token = 0
 url = "https://api.github.com/graphql"
-token_rafael = os.getenv('TOKEN_GITHUB')
-token_davi = os.getenv('TOKEN_GITHUB_DAVI')
+token_rafael = os.getenv(
+    'TOKEN_GITHUB') if 'TOKEN_GITHUB' in os.environ else os.getenv(
+        '{{secrets.TOKEN_GITHUB}}')
+token_davi = os.getenv(
+    'TOKEN_GITHUB_DAVI') if 'TOKEN_GITHUB_DAVI' in os.environ else os.getenv(
+        '{{secrets.TOKEN_GITHUB_DAVI}}')
 variables = {
     'after': None,
     'name': None,
@@ -94,7 +98,8 @@ for i, row in repo_list.iterrows():
                 })
                 df = pd.DataFrame(data=data)
                 df.to_csv('dados_pr.csv', index=False)
-        except:
+        except Exception as e:
+            print(e)
             swap_token()
             time.sleep(300)
             with open('log.txt', '+a') as f:
