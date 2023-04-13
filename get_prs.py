@@ -60,6 +60,9 @@ client = GraphQLClient(url)
 repo_list = pd.read_csv('lista-repo.csv')
 data = []
 
+print(token_davi)
+print(token_rafael)
+
 for i, row in repo_list.iterrows():
     variables["name"] = row['name']
     variables["owner"] = row['owner']
