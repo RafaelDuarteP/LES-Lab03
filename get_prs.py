@@ -53,12 +53,14 @@ query ($after: String, $owner: String!, $name: String!) {
 """
 client = GraphQLClient(url)
 
-repo_list = pd.read_csv('lista-repo.csv')
+repo_list = pd.read_csv('lista-repo-1.csv')
+print(repo_list)
 data = []
 
 for i, row in repo_list.iterrows():
     variables["name"] = row['name']
     variables["owner"] = row['owner']
+    variables["after"] = None
     has_next = True
     while has_next:
         try:
@@ -83,8 +85,8 @@ for i, row in repo_list.iterrows():
                 data.append({
                     'repo': row['name'],
                     'owner': row['owner'],
-                    'tamanho': pr['files']['totalCount'],
                     'id': pr['id'],
+                    'tamanho': pr['files']['totalCount'],
                     'created_at': created_at,
                     'closed_at': closed_at,
                     'descricao': len(pr['body']),
