@@ -13,7 +13,7 @@ total_prs_grupo = df.iloc[0]['total_prs']
 # Itera sobre o DataFrame a partir do segundo repositório
 for _, row in df.iloc[1:].iterrows():
     # Se a adição do repositório atual não ultrapassar o limite de 4000 total_prs no grupo atual
-    if total_prs_grupo + row['total_prs'] <= 5000:
+    if total_prs_grupo + row['total_prs'] <= 70000:
         # Adiciona o repositório ao grupo atual
         grupos[-1].append(row)
         total_prs_grupo += row['total_prs']

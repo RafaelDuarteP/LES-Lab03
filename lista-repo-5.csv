@@ -1,7 +1,10 @@
 owner,name,total_prs
-fffaraz,awesome-cpp,700
-microsoft,Web-Dev-For-Beginners,704
-sdmg15,Best-websites-a-programmer-should-visit,754
-Semantic-Org,Semantic-UI,765
-animate-css,animate.css,767
-3b1b,manim,772
+nestjs,nest,6423
+protocolbuffers,protobuf,6612
+prometheus,prometheus,6612
+TheAlgorithms,Python,6792
+netdata,netdata,7284
+strapi,strapi,7604
+angular,angular.js,7923
+EbookFoundation,free-programming-books,8266
+prettier,prettier,8297

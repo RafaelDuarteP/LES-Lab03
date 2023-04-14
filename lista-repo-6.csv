@@ -1,6 +1,7 @@
 owner,name,total_prs
-jaywcjlove,awesome-mac,797
-getify,You-Dont-Know-JS,824
-socketio,socket.io,825
-josephmisiti,awesome-machine-learning,835
-Solido,awesome-flutter,858
+denoland,deno,10030
+storybookjs,storybook,10137
+huggingface,transformers,11169
+microsoft,playwright,11437
+facebook,react-native,11980
+apache,superset,12870
