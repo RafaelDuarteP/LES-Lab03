@@ -6,6 +6,8 @@ import json
 import os
 import time
 
+ARQ = 1
+
 qtd_iteracoes = 0
 
 last_token = 0
@@ -53,7 +55,7 @@ query ($after: String, $owner: String!, $name: String!) {
 """
 client = GraphQLClient(url)
 
-repo_list = pd.read_csv('lista-repo-1.csv')
+repo_list = pd.read_csv(f'lista-repo-{ARQ}.csv')
 print(repo_list)
 data = []
 
@@ -68,7 +70,6 @@ for i, row in repo_list.iterrows():
             qtd_iteracoes += 1
             token = "Bearer " + swap_token()
             client.inject_token(token=token)
-            time.sleep(0.05)
             result = json.loads(
                 client.execute(
                     query=query,
@@ -95,12 +96,14 @@ for i, row in repo_list.iterrows():
                     'state': pr['state']
                 })
                 df = pd.DataFrame(data=data)
-                df.to_csv('dados_pr.csv', index=False)
+                df.to_csv(f'dados-pr-{ARQ}.csv', index=False)
         except Exception as e:
             print(e)
             swap_token()
+            time.sleep(120)
             with open('log.txt', '+a') as f:
                 f.write(row['name'] + ',' + row['owner'] + ',' +
                         variables["after"] + '\n')
 
+df.to_csv(f'dados-pr-{ARQ}.csv', index=False)
 print(df)
