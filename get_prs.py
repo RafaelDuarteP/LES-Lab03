@@ -102,8 +102,9 @@ for i, row in repo_list.iterrows():
             swap_token()
             time.sleep(120)
             with open('log.txt', '+a') as f:
-                f.write(row['name'] + ',' + row['owner'] + ',' +
-                        variables["after"] + '\n')
+                after = variables["after"] if variables[
+                    "after"] is not None else 'none'
+                f.write(row['name'] + ',' + row['owner'] + ',' + after + '\n')
 
 df.to_csv(f'dados-pr-{ARQ}.csv', index=False)
 print(df)
