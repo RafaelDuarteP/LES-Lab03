@@ -6,7 +6,7 @@ import json
 import os
 import time
 
-ARQ = 1
+ARQ = 9
 
 qtd_iteracoes = 0
 
@@ -56,6 +56,7 @@ query ($after: String, $owner: String!, $name: String!) {
 client = GraphQLClient(url)
 
 repo_list = pd.read_csv(f'lista-repo-{ARQ}.csv')
+repo_list = repo_list.sort_values('total_prs', ascending=True)
 print(repo_list)
 data = []
 
