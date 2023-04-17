@@ -6,7 +6,7 @@ import json
 import os
 import time
 
-ARQ = 9
+ARQ = 1
 
 qtd_iteracoes = 0
 
@@ -96,8 +96,8 @@ for i, row in repo_list.iterrows():
                     'reviews': pr['reviews']['totalCount'],
                     'state': pr['state']
                 })
-                df = pd.DataFrame(data=data)
-                df.to_csv(f'dados-pr-{ARQ}.csv', index=False)
+            df = pd.DataFrame(data=data)
+            df.to_csv(f'dados-pr-{ARQ}.csv', index=False)
         except Exception as e:
             print(e)
             swap_token()
